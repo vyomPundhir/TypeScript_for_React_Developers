@@ -144,10 +144,114 @@ type UserType = {
 
 let betterFunction =(user:UserType) =>{
   console.log(user.username)
-} // here we have user argument which a type UserType.
+} // here we have user argument which has a type UserType.
 
 type myFunc =(a:number, b:string)=>void // This is a Function signature, A prototype of a function and using this function we can create different functions.
 
 let write : myFunc = (num,str)=>{
   console.log(num+"times"+str);
-} // This is a function created using the function signature
+} // This is a function created using the function signature.
+
+// we can also provide our options to the property of the function signature. For Example:
+
+type UserType2 = {
+  username: string;
+  age: number;
+  phone?:string;
+  theme:"dark"|"light" //options are provided to the property "theme".
+}
+
+const userWithTheme : UserType2={
+  username:"john",
+  age:43,
+  theme:"light" //The "theme" property can only have either "light" or "dark".
+}
+
+// INTERFACES --> just like type but the advanced version
+
+interface IUser {
+  username:string;
+  email:string;
+  age:number
+} // this is how we create interface, NOTE:- there is no "=" sign after "IUser"...REMEMBER THIS***
+
+interface IEmployee extends IUser{
+  employeeId:number
+} // this has everything the userinterface "IUser" has additionally has employeeId too.
+
+const emp : IEmployee ={
+  username:"tom",
+  email:"tom@gmail.com",
+  age:23,
+  employeeId:1
+};// here it is mandatory to write employeeId here because emp has IEmployee Interface.
+
+const client: IUser={
+  username:"tom",
+  email:"tom@gmail.com",
+  age:23
+}; // but here client has IUser interface so emplyeeId is not needed.
+
+// NOTE: If you need to extend any "type", then, just use "interface" or if you don't need just use "type".
+
+// GENERICS --->
+
+interface IAuthor {
+  id: number,
+  username: string
+}// created a IAuthor named interface.
+
+interface ICategory{
+  id:number;
+  title:string;
+} // created a ICategory named interface.
+
+interface IPost {
+  id: number;
+  title: string;
+  desc: string;
+  extra: IAuthor[] | ICategory[]; // 
+
+} // created a IPost named interface
+
+interface IPostBetter <T> {
+  id: number;
+  title: string;
+  desc: string;
+  extra: T[];
+}
+
+const testMe : IPostBetter<String> ={
+  id: 1,
+  title: "Post Title",
+  desc: "Post Desc",
+  extra: ["str1", "str2", "str3"],
+};
+
+interface IPostEvenBetter <T extends object> {
+  id: number;
+  title: string;
+  desc: string;
+  extra: T[];
+}
+
+const testMe2 : IPostBetter<{id:number, username:string}> ={
+  id: 1,
+  title: "Post Title",
+  desc: "Post Desc",
+  extra: [{id:1,username:"john"}],
+};
+
+const testMe3 : IPostBetter<IAuthor> ={
+  id: 1,
+  title: "Post Title",
+  desc: "Post Desc",
+  extra: [{id:1,username:"john"}],
+};
+
+const testMe4 : IPostBetter<ICategory> ={
+  id: 1,
+  title: "Post Title",
+  desc: "Post Desc",
+  extra: [{id:1,title:"titlename"}],
+};
